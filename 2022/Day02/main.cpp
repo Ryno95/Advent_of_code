@@ -8,7 +8,6 @@
 // B, Y  = Paper = 2
 // C, Z = Scissors = 3
 
-
 using namespace std;
 
 typedef enum hands
@@ -30,20 +29,6 @@ typedef enum status
 	DRAW = 2,
 	WIN = 3
 } t_status;
-
-typedef enum beatsWhat
-{
-	ROCK_BEATS = SCISSORS,
-	SCISSORS_BEATS = PAPER,
-	PAPER_BEATS = ROCK
-} t_beatsWhat;
-
-typedef enum LossesTo
-{
-	ROCK_LOSES_TO = PAPER,
-	SCISSORS_LOSES_TO = ROCK,
-	PAPER_LOSES_TO = SCISSORS
-} t_LossesTo;
 
 typedef struct handPlayed
 {
@@ -111,9 +96,7 @@ void ex02(vector<t_handPlayed> &game)
 			gameScore += getWinsAgainst(game[i].oppHand);
 		else
 			gameScore += (getLosesTo(game[i].oppHand) + WIN_SCORE);
-
 	}
-	
 	cout << "ex02: " << gameScore << endl;
 }
 
@@ -133,7 +116,7 @@ int main()
 		t_handPlayed round;
 		round.oppHand = line[0] - 64;
 		round.myHand = line[spaceIndex + 1] - 87;
-		round.outcome = line[spaceIndex + 1] - 87;
+		round.outcome = round.myHand;
 		game.push_back(round);
 	}
 
