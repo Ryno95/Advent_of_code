@@ -25,7 +25,7 @@ def ex02(lines):
         if i > 0 and i % 3 == 2:
             common = set(team[0]) & set(team[1]) & set(team[2])
             for item in common:
-                if item != '\n' and item.islower():
+                if item.islower():
                     prioritySum += ord(item) - ord('a') + 1
                 else:
                     prioritySum += ord(item) - ord('A') + 27
