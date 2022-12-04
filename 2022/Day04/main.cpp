@@ -12,14 +12,12 @@ typedef struct s_Elf
 	int max;
 	void printElf()
 	{
-		cout << "MIn: " << min << " Max: " << max << endl;
+		cout << min << " - " << max << endl;
 	}
 } Elf;
 
 bool isInRange(Elf elf1, Elf elf2)
 {
-	// elf1.printElf();
-	// elf2.printElf();
 	if (elf1.min >= elf2.min && elf1.max <= elf2.max)
 		return (true);
 	else if (elf2.min >= elf1.min && elf2.max <= elf1.max)
@@ -27,90 +25,73 @@ bool isInRange(Elf elf1, Elf elf2)
 	return false;
 }
 
-// one string split in two, find common character
-void ex01(vector<string> &teams)
+void ex01(vector<pair<Elf, Elf> > &teams)
 {
 	int const size = teams.size();
-	vector<string> splitRange(2);
-	Elf team[2];
 	int counter = 0;
+
 	for (int i = 0; i < size; i++)
-	{
-		int commaPos = teams[i].find(',');
-		splitRange[0] = teams[i].substr(0, commaPos);
-		splitRange[1] = teams[i].substr(commaPos + 1);
-		// cout << "Range1: " << splitRange[0] << "   Range2: " << splitRange[1] << endl;
-		int dashPos = splitRange[0].find('-');
-		team[0].min = stoi(splitRange[0].substr(0, dashPos));
-		team[0].max = stoi(splitRange[0].substr(dashPos + 1));
-
-		dashPos = splitRange[1].find('-');
-		team[1].min = stoi(splitRange[1].substr(0, dashPos));
-		team[1].max = stoi(splitRange[1].substr(dashPos + 1));
-		if (isInRange(team[0], team[1]))
-		{
-			// cout << "Range found!" << endl;
+	{	
+		if (isInRange(teams[i].first, teams[i].second))
 			++counter;
-		}
 	}
-
 	cout << "ex01: " << counter << endl;
 }
 
 bool hasOverlap(Elf elf1, Elf elf2)
 {
-	// if ((elf1.min - elf2.max == 0 ) || (elf1.max - elf2.min == 0))
-	// 	return (true);
-	// else if ((elf2.min - elf1.max == 0 ) || (elf2.max - elf1.min == 0))
-	// 	return true;
-	// return false;
 	return max(elf1.min, elf2.min) <= min(elf1.max, elf2.max);
 }
 
-void ex02(vector<string> &teams)
+void ex02(vector<pair<Elf, Elf> > &teams)
 {
 	int const size = teams.size();
-	vector<string> splitRange(2);
-	Elf team[2];
 	int counter = 0;
+
 	for (int i = 0; i < size; i++)
 	{
-		int commaPos = teams[i].find(',');
-		splitRange[0] = teams[i].substr(0, commaPos);
-		splitRange[1] = teams[i].substr(commaPos + 1);
-		// cout << "Range1: " << splitRange[0] << "   Range2: " << splitRange[1] << endl;
-		int dashPos = splitRange[0].find('-');
-		team[0].min = stoi(splitRange[0].substr(0, dashPos));
-		team[0].max = stoi(splitRange[0].substr(dashPos + 1));
-
-		dashPos = splitRange[1].find('-');
-		team[1].min = stoi(splitRange[1].substr(0, dashPos));
-		team[1].max = stoi(splitRange[1].substr(dashPos + 1));
-		if ( hasOverlap(team[0], team[1]))
-		{
-			cout << "Elf1: " << splitRange[0];
-			cout << "  Elf2: " << splitRange[1] << endl;
-			// cout << "Range found!" << endl;
+		if ( hasOverlap(teams[i].first, teams[i].second))
 			++counter;
-		}
 	}
-
 	cout << "ex02: " << counter << endl;
 }
-int main(void)
+
+Elf createElf(string splitRange)
 {
-	fstream inputFile;
-	stringstream buffer;
+	Elf elf;
+	int dashPos = splitRange.find('-');
+
+	elf.min = stoi(splitRange.substr(0, dashPos));
+	elf.max = stoi(splitRange.substr(dashPos + 1));
+
+	return elf;
+}
+
+vector<pair<Elf, Elf> > parse()
+{
+	fstream 				inputFile;
+	stringstream 			buffer;
+	vector<pair<Elf, Elf> > teams;
 	
 	inputFile.open("input.txt", ios::in);
-	
 	buffer << inputFile.rdbuf();
-	vector<string> teams;
-	for(string line; getline(buffer, line);)
-		teams.push_back(line);
 
-	ex01(teams);
-	ex02(teams);
+	for(string line; getline(buffer, line);)
+	{
+		int commaPos = line.find(',');
+		Elf elf1 = createElf(line.substr(0, commaPos));
+		Elf elf2 = createElf(line.substr(commaPos + 1));
+
+		teams.push_back(make_pair(elf1, elf2));
+	}
+	return teams;
+}
+
+int main(void)
+{
+	vector<pair<Elf, Elf> > elfs = parse();
+	ex01(elfs);
+	ex02(elfs);
 
 	return 0;
 }
