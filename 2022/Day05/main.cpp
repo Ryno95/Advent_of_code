@@ -51,7 +51,7 @@ t_command parseCommand(string &line)
 	return command;
 }
 
-int ex01(vector<t_command> &commands, vector<char> *stack)
+void ex01(vector<t_command> &commands, vector<char> *stack)
 {
 	const int 	size = commands.size();
 	int			count = 0;
@@ -70,7 +70,7 @@ int ex01(vector<t_command> &commands, vector<char> *stack)
 	return count;
 }
 
-int ex02(vector<t_command> &commands, vector<char> *stack)
+void ex02(vector<t_command> &commands, vector<char> *stack)
 {
 	const int 	size = commands.size();
 	int			count = 0;
@@ -81,7 +81,6 @@ int ex02(vector<t_command> &commands, vector<char> *stack)
 		int from = commands[i].from;
 		int to = commands[i].to;
 		int amount = commands[i].amount;
-		tmp.clear();
 		for (int j = 0; j < amount && !stack[from].empty(); ++j)
 		{
 			tmp.push_back(stack[from].back());
@@ -128,15 +127,8 @@ void printStack(vector<char> *stacks, int amountOfStack)
 
 int main(void)
 {
-	stringstream solution;
-	const int stackSize = 9;
-	// vector<char> stacks[stackSize]{
-	// 	{'Z', 'N'},
-	// 	{'M', 'C', 'D'},
-	// 	{'P'}
-	// };
-
-	std::vector<char> stacks[stackSize]{
+	const int			stackSize = 9;
+	std::vector<char> 	stacks[stackSize]{
 		{'G','F','V','H','P','S'},
 		{'G','J','F','B','V','D','Z','M'},
 		{'G','M','L','J','N'},
@@ -149,19 +141,7 @@ int main(void)
 	};
 	
 	vector<t_command> commands = parse();
-	cout << "After Parse" << endl;
+	ex01(commands, stacks);
 	ex02(commands, stacks);
-	cout << "After RunCommands" << endl;
-	printStack(stacks, stackSize);
-	for (size_t i = 0; i < stackSize; i++)
-	{
-		if (stacks[i].size() > 0)
-			cout << stacks[i].back();
-	}
-	cout << endl;
-	// cout << solution.str() << endl;
-	// ex01(elfs);
-	// ex02(elfs);
-
 	return 0;
 }
