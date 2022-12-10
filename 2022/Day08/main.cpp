@@ -35,10 +35,10 @@ int main(void)
 	for(string line; getline(buffer, line);)
 		forrest.push_back(line);
 
-	for (size_t i = 1; i < forrest.size(); i++)
-	{
+	// for (size_t i = 1; i < forrest.size(); i++)
+	// {
 		
-	}
+	// }
 	
 	printForrest(forrest);
 	return 0;
