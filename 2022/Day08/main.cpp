@@ -6,40 +6,111 @@
 
 using namespace std;
 
-void parseForrest(char *treeRow, string &line)
-{
-	for (size_t i = 0; i < line.size(); i++)
-	{
-		treeRow[i] = line[i];
-	}
-}
+// void parseForrest(char *treeRow, string &line)
+// {
+// 	for (size_t i = 0; i < line.size(); i++)
+// 	{
+// 		treeRow[i] = line[i];
+// 	}
+// }
 
-void printForrest(vector<string> &forrest)
+void printForrest(int forrest[100][100], int height, int width)
 {
-	for (size_t i = 0; i < forrest.size(); i++)
+	for (int i = 0; i < height; i++)
 	{
-		cout << forrest[i] << endl;
+		for (int j = 0; j < width ; j++)
+		{
+			cout << forrest[i][j];
+		}
+		
+		cout << endl;
 	}
 	
+}
+
+int checkUpAndDown(int forrest[100][100], int row, int col, int treeSize, int height)
+{
+	int up, down;
+	for (up = row - 1; up >= 0; up--)
+	{
+		if (forrest[up][col] >= treeSize)
+			break ;
+	}
+	if (up < 0)
+		return 1;
+	for (down = row + 1 ; down < height + 1; down++)
+	{
+		if (forrest[down][col] >= treeSize)
+			break ;
+	}
+	if (down > height)
+		return 1;
+	return 0;
+}
+
+int checkLeftAndRight(int forrest[100][100], int row, int col, int treeSize, int width)
+{
+	int left, right;
+	for (left = col - 1; left >= 0; left--)
+	{
+		if (forrest[row][left] >= treeSize)
+			break ;
+	}
+	if (left < 0)
+		return 1;
+	for (right = col + 1 ; right < width + 1; right++)
+	{
+		if (forrest[row][right] >= treeSize)
+			break ;
+	}
+	if (right > width)
+		return 1;
+	return 0;
 }
 
 int main(void)
 {
-	fstream 				inputFile;
-	stringstream 			buffer;
+	fstream 		inputFile;
+	stringstream	buffer;
+	int 			forrest[100][100];
 	
-	inputFile.open("test.txt", ios::in);
+	bzero(forrest, 100 * 100);
+	inputFile.open("input.txt", ios::in);
 	buffer << inputFile.rdbuf();
-	vector<string> forrest;
+	// vector<string> forrest;
 	
-	for(string line; getline(buffer, line);)
-		forrest.push_back(line);
+	int i = 0;
+	int y = 0, x = 0;
+	for(string line; getline(buffer, line); i++)
+	{
+		for (size_t j = 0; j < line.size(); j++)
+			forrest[i][j] = line[j] - 48;
+		y = line.size();
+	}
+	x = i;
+	// printForrest(forrest, x, y);
+	cout << "x: " << x << endl;
+	cout << "y: " << y << endl;
 
+	int counter = 0;
+	for (int i = 1; i < x - 1; i++)
+	{
+		for (int j = 1; j < y - 1; j++)
+		{
+			if (checkUpAndDown(forrest, i, j, forrest[i][j], x) ||
+				checkLeftAndRight(forrest, i, j, forrest[i][j], y))
+				++counter;
+		}
+	}
+	counter += (x + y) * 2 - 4;
+	cout << counter << endl;
+	
+
+	
 	// for (size_t i = 1; i < forrest.size(); i++)
 	// {
 		
 	// }
 	
-	printForrest(forrest);
 	return 0;
 }
