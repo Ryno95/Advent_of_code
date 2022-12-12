@@ -5,16 +5,9 @@
 #include <vector>
 
 using namespace std;
+#define BUFSIZE 100
 
-// void parseForrest(char *treeRow, string &line)
-// {
-// 	for (size_t i = 0; i < line.size(); i++)
-// 	{
-// 		treeRow[i] = line[i];
-// 	}
-// }
-
-void printForrest(int forrest[100][100], int height, int width)
+void printForrest(int forrest[BUFSIZE][BUFSIZE], int height, int width)
 {
 	for (int i = 0; i < height; i++)
 	{
@@ -22,13 +15,12 @@ void printForrest(int forrest[100][100], int height, int width)
 		{
 			cout << forrest[i][j];
 		}
-		
 		cout << endl;
 	}
 	
 }
 
-int checkUpAndDown(int forrest[100][100], int row, int col, int treeSize, int height)
+int checkUpAndDown(int forrest[BUFSIZE][BUFSIZE], int row, int col, int treeSize, int height)
 {
 	int up, down;
 	for (up = row - 1; up >= 0; up--)
@@ -38,17 +30,17 @@ int checkUpAndDown(int forrest[100][100], int row, int col, int treeSize, int he
 	}
 	if (up < 0)
 		return 1;
-	for (down = row + 1 ; down < height + 1; down++)
+	for (down = row + 1 ; down < height; down++)
 	{
 		if (forrest[down][col] >= treeSize)
 			break ;
 	}
-	if (down > height)
+	if (down >= height)
 		return 1;
 	return 0;
 }
 
-int checkLeftAndRight(int forrest[100][100], int row, int col, int treeSize, int width)
+int checkLeftAndRight(int forrest[BUFSIZE][BUFSIZE], int row, int col, int treeSize, int width)
 {
 	int left, right;
 	for (left = col - 1; left >= 0; left--)
@@ -58,12 +50,12 @@ int checkLeftAndRight(int forrest[100][100], int row, int col, int treeSize, int
 	}
 	if (left < 0)
 		return 1;
-	for (right = col + 1 ; right < width + 1; right++)
+	for (right = col + 1 ; right < width; right++)
 	{
 		if (forrest[row][right] >= treeSize)
 			break ;
 	}
-	if (right > width)
+	if (right >= width)
 		return 1;
 	return 0;
 }
@@ -72,9 +64,9 @@ int main(void)
 {
 	fstream 		inputFile;
 	stringstream	buffer;
-	int 			forrest[100][100];
+	int 			forrest[BUFSIZE][BUFSIZE];
 	
-	bzero(forrest, 100 * 100);
+	bzero(forrest, BUFSIZE * BUFSIZE);
 	inputFile.open("input.txt", ios::in);
 	buffer << inputFile.rdbuf();
 	// vector<string> forrest;
@@ -88,7 +80,7 @@ int main(void)
 		y = line.size();
 	}
 	x = i;
-	// printForrest(forrest, x, y);
+	printForrest(forrest, x, y);
 	cout << "x: " << x << endl;
 	cout << "y: " << y << endl;
 
@@ -99,18 +91,11 @@ int main(void)
 		{
 			if (checkUpAndDown(forrest, i, j, forrest[i][j], x) ||
 				checkLeftAndRight(forrest, i, j, forrest[i][j], y))
-				++counter;
+					++counter;
 		}
 	}
 	counter += (x + y) * 2 - 4;
 	cout << counter << endl;
-	
-
-	
-	// for (size_t i = 1; i < forrest.size(); i++)
-	// {
-		
-	// }
 	
 	return 0;
 }
